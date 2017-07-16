@@ -276,6 +276,51 @@ class test_AMQP:
         assert event['routing_key'] == 'xyb'
         assert event['exchange'] == 'xyz'
 
+    def test_send_event_exchange_anon_with_exchange(self):
+        prod = Mock(name='prod')
+        self.app.amqp.send_task_message(
+            prod, 'foo', self.simple_message_no_sent_event, queue='bar',
+            retry=False, exchange_type='direct', exchange='xyz',
+        )
+        prod.publish.assert_called()
+        pub = prod.publish.call_args[0][1]
+        assert pub['routing_key'] == 'foo'
+        assert pub['exchange'] == ''
+
+    def test_send_event_exchange_anon_with_routing_key(self):
+        prod = Mock(name='prod')
+        self.app.amqp.send_task_message(
+            prod, 'foo', self.simple_message_no_sent_event, queue='bar',
+            retry=False, exchange_type='direct', routing_key='xyb',
+        )
+        prod.publish.assert_called()
+        pub = prod.publish.call_args[0][1]
+        assert pub['routing_key'] == 'foo'
+        assert pub['exchange'] == ''
+
+    def test_send_event_exchange_anon_only_exchange_not_set(self):
+        prod = Mock(name='prod')
+        self.app.amqp.send_task_message(
+            prod, 'foo', self.simple_message_no_sent_event, queue='bar',
+            retry=False, exchange_type='direct', exchange='xyz',
+            routing_key='xyb',
+        )
+        prod.publish.assert_called()
+        pub = prod.publish.call_args[0][1]
+        assert pub['routing_key'] == 'xyb'
+        assert pub['exchange'] == 'xyz'
+
+    def test_send_event_exchange_anon_only_direct(self):
+        prod = Mock(name='prod')
+        self.app.amqp.send_task_message(
+            prod, 'foo', self.simple_message_no_sent_event, queue='bar',
+            retry=False, exchange='xyz', routing_key='xyb',
+        )
+        prod.publish.assert_called()
+        pub = prod.publish.call_args[0][1]
+        assert pub['routing_key'] == 'xyb'
+        assert pub['exchange'] == 'xyz'
+
     def test_send_task_message__with_delivery_mode(self):
         prod = Mock(name='producer')
         self.app.amqp.send_task_message(
