@@ -283,7 +283,7 @@ class test_AMQP:
             retry=False, exchange_type='direct', exchange='xyz',
         )
         prod.publish.assert_called()
-        pub = prod.publish.call_args[0][1]
+        pub = prod.publish.call_args[1]
         assert pub['routing_key'] == 'foo'
         assert pub['exchange'] == ''
 
@@ -294,7 +294,7 @@ class test_AMQP:
             retry=False, exchange_type='direct', routing_key='xyb',
         )
         prod.publish.assert_called()
-        pub = prod.publish.call_args[0][1]
+        pub = prod.publish.call_args[1]
         assert pub['routing_key'] == 'foo'
         assert pub['exchange'] == ''
 
@@ -306,7 +306,7 @@ class test_AMQP:
             routing_key='xyb',
         )
         prod.publish.assert_called()
-        pub = prod.publish.call_args[0][1]
+        pub = prod.publish.call_args[1]
         assert pub['routing_key'] == 'xyb'
         assert pub['exchange'] == 'xyz'
 
@@ -317,7 +317,7 @@ class test_AMQP:
             retry=False, exchange='xyz', routing_key='xyb',
         )
         prod.publish.assert_called()
-        pub = prod.publish.call_args[0][1]
+        pub = prod.publish.call_args[1]
         assert pub['routing_key'] == 'xyb'
         assert pub['exchange'] == 'xyz'
 
