@@ -284,7 +284,7 @@ class test_AMQP:
         )
         prod.publish.assert_called()
         pub = prod.publish.call_args[1]
-        assert pub['routing_key'] == 'foo'
+        assert pub['routing_key'] == 'bar'
         assert pub['exchange'] == ''
 
     def test_send_event_exchange_anon_with_routing_key(self):
@@ -295,7 +295,7 @@ class test_AMQP:
         )
         prod.publish.assert_called()
         pub = prod.publish.call_args[1]
-        assert pub['routing_key'] == 'foo'
+        assert pub['routing_key'] == 'bar'
         assert pub['exchange'] == ''
 
     def test_send_event_exchange_anon_only_exchange_not_set(self):
